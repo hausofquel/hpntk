@@ -96,7 +96,18 @@ p {
   transition: max-width 0.5s ease, opacity 0.3s ease;
 }
 
-.wordmark:hover .wordmark-reveal {
+/* True hover devices (mouse/trackpad) get the reveal on hover as
+   before. Touch devices don't get a real hover state — that's handled
+   separately below via a tap-toggled class, so the reveal doesn't get
+   stuck open until reload. */
+@media (hover: hover) {
+  .wordmark:hover .wordmark-reveal {
+    max-width: 700px;
+    opacity: 1;
+  }
+}
+
+.wordmark.reveal-open .wordmark-reveal {
   max-width: 700px;
   opacity: 1;
 }
@@ -114,6 +125,8 @@ p {
   background: var(--bg);
 }
 
+/* Two loops are layered in the same spot; only the active one is
+   visible. Clicking HPNTK below crossfades between them. */
 .hero-video {
   position: absolute;
   inset: 0;
@@ -121,6 +134,12 @@ p {
   height: 100%;
   object-fit: cover;
   filter: contrast(1.05);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.hero-video.is-active {
+  opacity: 1;
 }
 
 .hero-content {
@@ -149,6 +168,7 @@ p {
 .hero h1.desktop-mark {
   display: inline-block;
   will-change: transform;
+  cursor: pointer;
 }
 
 /* Multilingual "Welcome" cycler — lives inside the nav wordmark's
