@@ -55,7 +55,7 @@ p {
   top: 0; left: 0; right: 0;
   z-index: 50;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 20px 5vw;
   background: rgba(10, 10, 12, 0.72);
@@ -74,8 +74,15 @@ p {
   color: var(--ink);
 }
 
+/* The reveal is unpinned from the wordmark's own position — it's fixed
+   to the header band and comes out from the center of the screen on
+   hover (desktop), independent of HPNTK staying put on the far left. */
 .wordmark-reveal {
-  display: inline-block;
+  position: fixed;
+  top: 32px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 51;
   max-width: 0;
   opacity: 0;
   overflow: hidden;
@@ -85,60 +92,13 @@ p {
   font-size: 0.68rem;
   letter-spacing: 0.03em;
   color: var(--acid);
-  margin-left: 0;
-  transition: max-width 0.5s ease, opacity 0.3s ease, margin-left 0.5s ease;
+  pointer-events: none;
+  transition: max-width 0.5s ease, opacity 0.3s ease;
 }
 
 .wordmark:hover .wordmark-reveal {
   max-width: 700px;
   opacity: 1;
-  margin-left: 78px;
-}
-
-.site-header nav { display: flex; gap: 28px; }
-
-.site-header nav a {
-  font-family: var(--serif);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
-  color: var(--ink);
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
-}
-
-.site-header nav a:hover { opacity: 1; }
-
-/* Mobile nav toggle — hidden on desktop, becomes the hamburger button
-   that opens the nav as a slide-out panel below 640px. */
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  width: 32px;
-  height: 32px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.nav-toggle span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--ink);
-  transition: transform 0.3s ease, opacity 0.2s ease, background 0.2s ease;
-}
-
-.site-header.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.site-header.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
-.site-header.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-.site-header.nav-open .nav-toggle span { background: var(--acid); }
-
-.nav-overlay {
-  display: none;
 }
 
 /* ---------- Hero ---------- */
@@ -411,48 +371,12 @@ img, video {
   .archive { padding: 70px 6vw 90px; }
   .shop-cta, .about { padding: 90px 6vw; }
 
-  .nav-toggle { display: flex; }
-
-  .site-header nav {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: min(78vw, 320px);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 32px;
-    padding: 0 12vw;
-    background: rgba(10, 10, 12, 0.97);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-left: 1px solid rgba(255,255,255,0.08);
-    transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 49;
-  }
-
-  .site-header.nav-open nav {
-    transform: translateX(0);
-  }
-
-  .site-header nav a { font-size: 0.95rem; }
-
-  .nav-overlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    z-index: 48;
-  }
-
-  .site-header.nav-open ~ .nav-overlay {
-    opacity: 1;
-    pointer-events: auto;
+  /* On phone the reveal anchors to the right edge instead of the
+     center, growing leftward out from there. */
+  .wordmark-reveal {
+    top: 29px;
+    left: auto;
+    right: 6vw;
+    transform: translateY(-50%);
   }
 }

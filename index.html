@@ -14,17 +14,7 @@
 
 <header class="site-header">
   <a href="#top" class="wordmark"><span class="wordmark-text">HPNTK</span><span class="wordmark-reveal"><span class="welcome-text">Welcome! (:</span></span></a>
-  <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
-    <span></span><span></span><span></span>
-  </button>
-  <nav id="site-nav">
-    <a href="#work">Archive</a>
-    <a href="#shop">Shop</a>
-    <a href="#about">About</a>
-    <a href="#contact">Inquire</a>
-  </nav>
 </header>
-<div class="nav-overlay" aria-hidden="true"></div>
 
 <section id="top" class="hero" oncontextmenu="return false">
   <video class="hero-video" autoplay muted loop playsinline oncontextmenu="return false" controlsList="nodownload noremoteplayback" disablePictureInPicture>
@@ -89,48 +79,6 @@
 </footer>
 
 <script>
-  // Mobile nav — hamburger toggle opens the nav as a slide-out panel.
-  (function () {
-    var header = document.querySelector('.site-header');
-    var toggle = document.querySelector('.nav-toggle');
-    var nav = document.getElementById('site-nav');
-    var overlay = document.querySelector('.nav-overlay');
-    if (!header || !toggle || !nav) return;
-
-    var closeNav = function () {
-      header.classList.remove('nav-open');
-      toggle.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    };
-
-    var openNav = function () {
-      header.classList.add('nav-open');
-      toggle.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    };
-
-    toggle.addEventListener('click', function () {
-      if (header.classList.contains('nav-open')) { closeNav(); } else { openNav(); }
-    });
-
-    Array.prototype.forEach.call(nav.querySelectorAll('a'), function (link) {
-      link.addEventListener('click', closeNav);
-    });
-
-    if (overlay) {
-      overlay.addEventListener('click', closeNav);
-    }
-
-    // if the viewport grows past mobile while the panel is open, close it
-    var mq = window.matchMedia('(max-width: 640px)');
-    var syncClose = function () { if (!mq.matches) closeNav(); };
-    if (mq.addEventListener) {
-      mq.addEventListener('change', syncClose);
-    } else if (mq.addListener) {
-      mq.addListener(syncClose);
-    }
-  })();
-
   // Some browsers (notably iOS Safari in Low Power Mode) block video
   // autoplay outright, even with muted/playsinline/autoplay set. If that
   // happens, fall back to starting the loop on the visitor's first tap.
@@ -160,15 +108,21 @@
 
   // "Welcome" cycler — lives inside the nav wordmark's hover reveal,
   // mirroring its green mono styling and replacing the static tagline.
-  // Each greeting drops in like a slot reel and stops hard, looping
-  // through the main world languages.
+  // Each greeting drops in like a slot reel and stops hard.
+  //
+  // Order: a random shuffle of the 23 other languages, 4 at a time,
+  // with "Welcome!" forced in as the 5th every time — so Welcome shows
+  // up far more often than any other single language, and is the only
+  // one that ever repeats. Once all 23 have been shown, the pool
+  // reshuffles and the pattern starts over.
   (function () {
     var el = document.querySelector('.wordmark-reveal .welcome-text');
     var wrap = document.querySelector('.wordmark-reveal');
     if (!el || !wrap) return;
 
-    var greetings = [
-      'Welcome! (:',
+    var WELCOME = 'Welcome! (:';
+
+    var otherGreetings = [
       'ようこそ！(:',
       'Bienvenue ! (:',
       '¡Bienvenido! (:',
@@ -179,18 +133,51 @@
       'Добро пожаловать! (:',
       '환영합니다! (:',
       'स्वागत है! (:',
-      'Benvenuto! (:'
+      'Benvenuto! (:',
+      'Chào mừng! (:',
+      'ยินดีต้อนรับ! (:',
+      'Hoş geldin! (:',
+      'Witamy! (:',
+      'Welkom! (:',
+      'Välkommen! (:',
+      'Καλώς ήρθες! (:',
+      'ברוך הבא! (:',
+      'Selamat datang! (:',
+      'Karibu! (:',
+      'স্বাগতম! (:',
+      'خوش آمدید! (:'
     ];
 
-    var i = 0;
+    var shuffle = function (arr) {
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+      }
+      return arr;
+    };
+
+    var queue = shuffle(otherGreetings.slice());
+    var groupCount = 0;
+
+    var nextGreeting = function () {
+      if (groupCount < 4 && queue.length > 0) {
+        groupCount++;
+        return queue.shift();
+      }
+      groupCount = 0;
+      if (queue.length === 0) {
+        queue = shuffle(otherGreetings.slice());
+      }
+      return WELCOME;
+    };
 
     var cycle = function () {
-      i = (i + 1) % greetings.length;
+      var next = nextGreeting();
       el.classList.remove('dropping');
       // force reflow so the animation can restart
       void el.offsetWidth;
-      el.textContent = greetings[i];
-      wrap.setAttribute('aria-label', greetings[i]);
+      el.textContent = next;
+      wrap.setAttribute('aria-label', next);
       el.classList.add('dropping');
     };
 
