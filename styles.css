@@ -331,6 +331,12 @@ img, video {
   opacity: 0.6;
 }
 
+.copy-mark {
+  font-size: 1.35em;
+  vertical-align: -0.08em;
+  display: inline-block;
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 720px) {
