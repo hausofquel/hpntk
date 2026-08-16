@@ -149,9 +149,61 @@ p {
   margin: 0 auto;
 }
 
-/* Multilingual "Welcome" cycler — mobile only. Desktop keeps the
-   static HPNTK wordmark; the cycler is hidden there. */
-.welcome-cycle { display: none; }
+/* The literal "HPNTK" h1 stays in the DOM for SEO/accessibility but is
+   visually replaced everywhere by the welcome cycler below. */
+.hero h1.desktop-mark {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* HPNTK nav wordmark — ambient random glitch. Fires on its own
+   schedule (see script), with duration and distortion magnitude
+   randomized per-burst via --glitch-dur / --gmag custom properties. */
+.wordmark-text {
+  display: inline-block;
+  will-change: transform;
+}
+
+.wordmark-text.mark-glitching {
+  animation-name: brand-glitch;
+  animation-duration: var(--glitch-dur, 0.4s);
+  animation-timing-function: steps(2, jump-none);
+}
+
+@keyframes brand-glitch {
+  0%   { transform: translate(0, 0) skewX(0deg); opacity: 1; text-shadow: none; }
+  15%  { transform: translate(calc(-3px * var(--gmag, 1)), calc(1px * var(--gmag, 1))) skewX(calc(3deg * var(--gmag, 1)));
+         opacity: 0.75; text-shadow: calc(2px * var(--gmag, 1)) 0 var(--rose), calc(-2px * var(--gmag, 1)) 0 var(--electric); }
+  30%  { transform: translate(calc(3px * var(--gmag, 1)), calc(-1px * var(--gmag, 1))) skewX(calc(-4deg * var(--gmag, 1)));
+         opacity: 0.6; text-shadow: calc(-3px * var(--gmag, 1)) 0 var(--acid), calc(3px * var(--gmag, 1)) 0 var(--electric); }
+  45%  { transform: translate(calc(-2px * var(--gmag, 1)), 0) skewX(calc(2deg * var(--gmag, 1)));
+         opacity: 0.8; text-shadow: calc(2px * var(--gmag, 1)) 0 var(--rose), calc(-1px * var(--gmag, 1)) 0 var(--acid); }
+  60%  { transform: translate(calc(2px * var(--gmag, 1)), calc(1px * var(--gmag, 1))) skewX(calc(-2deg * var(--gmag, 1)));
+         opacity: 0.5; text-shadow: calc(-2px * var(--gmag, 1)) 0 var(--electric), calc(1px * var(--gmag, 1)) 0 var(--rose); }
+  80%  { transform: translate(calc(-1px * var(--gmag, 1)), 0) skewX(calc(1deg * var(--gmag, 1)));
+         opacity: 0.85; text-shadow: calc(1px * var(--gmag, 1)) 0 var(--acid); }
+  100% { transform: translate(0, 0) skewX(0deg); opacity: 1; text-shadow: none; }
+}
+
+/* Multilingual "Welcome" cycler — universal, phone and desktop alike.
+   Replaces the static HPNTK hero mark everywhere. Each greeting drops
+   in from above like a slot-machine reel and stops hard. */
+.welcome-cycle {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  height: 1em;
+  line-height: 1;
+  font-size: clamp(2.6rem, 9vw, 6rem);
+  margin-bottom: 20px;
+}
 
 .welcome-text {
   display: inline-block;
@@ -160,22 +212,14 @@ p {
   color: var(--ink);
 }
 
-.welcome-text.glitching {
-  animation: glitch-burst 0.36s steps(2, jump-none);
+.welcome-text.dropping {
+  animation: slot-drop 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes glitch-burst {
-  0%   { transform: translate(0, 0) skewX(0deg); opacity: 1; text-shadow: none; }
-  15%  { transform: translate(-3px, 1px) skewX(3deg); opacity: 0.75;
-         text-shadow: 2px 0 var(--rose), -2px 0 var(--electric); }
-  30%  { transform: translate(3px, -1px) skewX(-4deg); opacity: 0.6;
-         text-shadow: -3px 0 var(--acid), 3px 0 var(--electric); }
-  45%  { transform: translate(-2px, 0) skewX(2deg); opacity: 0.8;
-         text-shadow: 2px 0 var(--rose), -1px 0 var(--acid); }
-  60%  { transform: translate(2px, 1px) skewX(-2deg); opacity: 0.5;
-         text-shadow: -2px 0 var(--electric), 1px 0 var(--rose); }
-  80%  { transform: translate(-1px, 0) skewX(1deg); opacity: 0.85; text-shadow: 1px 0 var(--acid); }
-  100% { transform: translate(0, 0) skewX(0deg); opacity: 1; text-shadow: none; }
+@keyframes slot-drop {
+  0%   { transform: translateY(-140%); opacity: 0; }
+  70%  { transform: translateY(6%); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
 }
 
 /* ---------- Archive / Featured work ---------- */
@@ -381,12 +425,4 @@ img, video {
   .site-header nav a { font-size: 0.65rem; }
   .archive { padding: 70px 6vw 90px; }
   .shop-cta, .about { padding: 90px 6vw; }
-
-  /* Phone gets the cycling multilingual welcome instead of the static mark */
-  .desktop-mark { display: none; }
-  .welcome-cycle {
-    display: block;
-    font-size: clamp(2.4rem, 11vw, 3.4rem);
-    line-height: 1;
-  }
 }

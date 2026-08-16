@@ -113,8 +113,9 @@
     }
   })();
 
-  // Mobile-only "Welcome" cycler — glitches through greetings in the
-  // main world languages, looping. Desktop keeps the static HPNTK mark.
+  // Universal "Welcome" cycler — phone and desktop alike. Each greeting
+  // drops in like a slot reel and stops hard, looping through the main
+  // world languages. Replaces the static HPNTK hero mark everywhere.
   (function () {
     var el = document.querySelector('.welcome-text');
     var wrap = document.querySelector('.welcome-cycle');
@@ -135,41 +136,45 @@
       'Benvenuto! (:'
     ];
 
-    var mq = window.matchMedia('(max-width: 640px)');
     var i = 0;
-    var timer = null;
 
     var cycle = function () {
       i = (i + 1) % greetings.length;
-      el.classList.remove('glitching');
+      el.classList.remove('dropping');
       // force reflow so the animation can restart
       void el.offsetWidth;
       el.textContent = greetings[i];
       wrap.setAttribute('aria-label', greetings[i]);
-      el.classList.add('glitching');
+      el.classList.add('dropping');
     };
 
-    var start = function () {
-      if (timer) return;
-      timer = setInterval(cycle, 2200);
+    setInterval(cycle, 2200);
+  })();
+
+  // Ambient random glitch on the "HPNTK" nav wordmark — fires on an
+  // unpredictable schedule, with duration and how hard it distorts the
+  // text both randomized per-burst. Runs everywhere, all the time.
+  (function () {
+    var mark = document.querySelector('.wordmark-text');
+    if (!mark) return;
+
+    var schedule = function () {
+      var delay = 2500 + Math.random() * 6500; // next glitch in 2.5s–9s
+      setTimeout(function () {
+        var dur = (0.22 + Math.random() * 0.55).toFixed(2) + 's'; // 0.22s–0.77s burst
+        var mag = (0.5 + Math.random() * 2).toFixed(2);            // 0.5x–2.5x distortion
+
+        mark.style.setProperty('--glitch-dur', dur);
+        mark.style.setProperty('--gmag', mag);
+        mark.classList.remove('mark-glitching');
+        void mark.offsetWidth;
+        mark.classList.add('mark-glitching');
+
+        schedule();
+      }, delay);
     };
 
-    var stop = function () {
-      if (!timer) return;
-      clearInterval(timer);
-      timer = null;
-    };
-
-    var sync = function () {
-      if (mq.matches) { start(); } else { stop(); }
-    };
-
-    sync();
-    if (mq.addEventListener) {
-      mq.addEventListener('change', sync);
-    } else if (mq.addListener) {
-      mq.addListener(sync);
-    }
+    schedule();
   })();
 </script>
 
