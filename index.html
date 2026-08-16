@@ -14,13 +14,17 @@
 
 <header class="site-header">
   <a href="#top" class="wordmark"><span class="wordmark-text">HPNTK</span><span class="wordmark-reveal"><span class="welcome-text">Welcome! (:</span></span></a>
-  <nav>
+  <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="site-nav">
     <a href="#work">Archive</a>
     <a href="#shop">Shop</a>
     <a href="#about">About</a>
     <a href="#contact">Inquire</a>
   </nav>
 </header>
+<div class="nav-overlay" aria-hidden="true"></div>
 
 <section id="top" class="hero" oncontextmenu="return false">
   <video class="hero-video" autoplay muted loop playsinline oncontextmenu="return false" controlsList="nodownload noremoteplayback" disablePictureInPicture>
@@ -85,6 +89,48 @@
 </footer>
 
 <script>
+  // Mobile nav — hamburger toggle opens the nav as a slide-out panel.
+  (function () {
+    var header = document.querySelector('.site-header');
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.getElementById('site-nav');
+    var overlay = document.querySelector('.nav-overlay');
+    if (!header || !toggle || !nav) return;
+
+    var closeNav = function () {
+      header.classList.remove('nav-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+
+    var openNav = function () {
+      header.classList.add('nav-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+
+    toggle.addEventListener('click', function () {
+      if (header.classList.contains('nav-open')) { closeNav(); } else { openNav(); }
+    });
+
+    Array.prototype.forEach.call(nav.querySelectorAll('a'), function (link) {
+      link.addEventListener('click', closeNav);
+    });
+
+    if (overlay) {
+      overlay.addEventListener('click', closeNav);
+    }
+
+    // if the viewport grows past mobile while the panel is open, close it
+    var mq = window.matchMedia('(max-width: 640px)');
+    var syncClose = function () { if (!mq.matches) closeNav(); };
+    if (mq.addEventListener) {
+      mq.addEventListener('change', syncClose);
+    } else if (mq.addListener) {
+      mq.addListener(syncClose);
+    }
+  })();
+
   // Some browsers (notably iOS Safari in Low Power Mode) block video
   // autoplay outright, even with muted/playsinline/autoplay set. If that
   // happens, fall back to starting the loop on the visitor's first tap.
