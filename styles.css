@@ -117,6 +117,7 @@ p {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: var(--bg);
 }
 
 .hero-video {
