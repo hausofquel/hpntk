@@ -148,7 +148,26 @@ p {
   text-align: center;
   max-width: 680px;
   padding: 0 24px;
+  /* the box itself shouldn't catch clicks meant for the nav zones
+     underneath — only the actual HPNTK mark (re-enabled below) should */
+  pointer-events: none;
 }
+
+/* Invisible left/right click zones over the hero — quietly step
+   through the video loops one at a time, independent of the HPNTK
+   click (which also cycles). Not advertised anywhere on purpose. */
+.hero-nav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 22%;
+  z-index: 3;
+  cursor: pointer;
+  background: transparent;
+}
+
+.hero-nav-prev { left: 0; }
+.hero-nav-next { right: 0; }
 
 .hero h1 {
   font-size: clamp(3rem, 9vw, 6rem);
@@ -169,6 +188,7 @@ p {
   display: inline-block;
   will-change: transform;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 /* Multilingual "Welcome" cycler — lives inside the nav wordmark's

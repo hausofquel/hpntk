@@ -48,8 +48,54 @@
         controlsList="nodownload noremoteplayback"
         disablePictureInPicture
       >
-        <source src="assets/hero-loop-2.mp4" type="video/mp4" />
+        <source src="assets/hero-loop-2-1.mp4" type="video/mp4" />
       </video>
+      <video
+        class="hero-video"
+        muted
+        loop
+        playsinline
+        oncontextmenu="return false;"
+        controlsList="nodownload noremoteplayback"
+        disablePictureInPicture
+      >
+        <source src="assets/hero-loop-2-2.mp4" type="video/mp4" />
+      </video>
+      <video
+        class="hero-video"
+        muted
+        loop
+        playsinline
+        oncontextmenu="return false;"
+        controlsList="nodownload noremoteplayback"
+        disablePictureInPicture
+      >
+        <source src="assets/hero-loop-2-3.mp4" type="video/mp4" />
+      </video>
+      <video
+        class="hero-video"
+        muted
+        loop
+        playsinline
+        oncontextmenu="return false;"
+        controlsList="nodownload noremoteplayback"
+        disablePictureInPicture
+      >
+        <source src="assets/hero-loop-2-4.mp4" type="video/mp4" />
+      </video>
+      <video
+        class="hero-video"
+        muted
+        loop
+        playsinline
+        oncontextmenu="return false;"
+        controlsList="nodownload noremoteplayback"
+        disablePictureInPicture
+      >
+        <source src="assets/hero-loop-2-6.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-nav hero-nav-prev" aria-hidden="true"></div>
+      <div class="hero-nav hero-nav-next" aria-hidden="true"></div>
       <div class="hero-content">
         <h1
           class="desktop-mark"
@@ -81,9 +127,9 @@
               />
             </div>
             <div class="piece-info">
-              <h3>Untitled — Interruption Study</h3>
+              <h3>A Beautiful...</h3>
               <p class="piece-concept">
-                A study in interruption. Classical marble pulled through static,
+                Study in interruption. Classical marble pulled through static,
                 street color, and torn print — what happens when something
                 already beautiful is allowed to break.
               </p>
@@ -120,6 +166,9 @@
         purpose stays the same: inviting anyone who encounters the work to look
         longer, question what's real, and find their own reflection in the
         distortion.
+      </p>
+      <p class="about-note">
+        Built and continued for myself first. Available to buy and hire.
       </p>
     </section>
 
@@ -362,11 +411,14 @@
 
         schedule();
 
-        // Clicking/tapping HPNTK switches which of the two hero loops is
-        // showing, and always fires its own glitch burst right on the
-        // click — on top of, not instead of, the ambient random ones above.
+        // Clicking/tapping HPNTK cycles through all the hero loops layered
+        // in the background, and always fires its own glitch burst right
+        // on the click — on top of, not instead of, the ambient ones above.
+        // Two invisible strips on the left/right edges of the hero do the
+        // same thing but step backward/forward specifically — undocumented,
+        // just there for poking around.
         var videos = document.querySelectorAll(".hero-video");
-        var switchLoop = function () {
+        var switchLoop = function (dir) {
           burst();
           if (videos.length < 2) return;
 
@@ -377,20 +429,33 @@
               break;
             }
           }
-          var nextIndex = (activeIndex + 1) % videos.length;
+          var nextIndex = (activeIndex + dir + videos.length) % videos.length;
 
           videos[activeIndex].classList.remove("is-active");
           videos[nextIndex].classList.add("is-active");
           videos[nextIndex].play().catch(function () {});
         };
 
-        mark.addEventListener("click", switchLoop);
+        mark.addEventListener("click", function () {
+          switchLoop(1);
+        });
         mark.addEventListener("keydown", function (e) {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            switchLoop();
+            switchLoop(1);
           }
         });
+
+        var prevZone = document.querySelector(".hero-nav-prev");
+        var nextZone = document.querySelector(".hero-nav-next");
+        if (prevZone)
+          prevZone.addEventListener("click", function () {
+            switchLoop(-1);
+          });
+        if (nextZone)
+          nextZone.addEventListener("click", function () {
+            switchLoop(1);
+          });
       })();
     </script>
   </body>
