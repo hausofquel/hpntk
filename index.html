@@ -37,6 +37,17 @@
         controlsList="nodownload noremoteplayback"
         disablePictureInPicture
       >
+        <source src="assets/hero-loop-0-static.mp4" type="video/mp4" />
+      </video>
+      <video
+        class="hero-video"
+        muted
+        loop
+        playsinline
+        oncontextmenu="return false;"
+        controlsList="nodownload noremoteplayback"
+        disablePictureInPicture
+      >
         <source src="assets/hero-loop.mp4" type="video/mp4" />
       </video>
       <video
@@ -60,17 +71,6 @@
         disablePictureInPicture
       >
         <source src="assets/hero-loop-2-2.mp4" type="video/mp4" />
-      </video>
-      <video
-        class="hero-video"
-        muted
-        loop
-        playsinline
-        oncontextmenu="return false;"
-        controlsList="nodownload noremoteplayback"
-        disablePictureInPicture
-      >
-        <source src="assets/hero-loop-2-3.mp4" type="video/mp4" />
       </video>
       <video
         class="hero-video"
@@ -127,20 +127,62 @@
               />
             </div>
             <div class="piece-info">
-              <h3>A Beautiful...</h3>
+              <h3 class="piece-title">A Beautiful...</h3>
               <p class="piece-concept">
                 Study in interruption. Classical marble pulled through static,
                 street color, and torn print — what happens when something
                 already beautiful is allowed to break.
               </p>
-              <ul class="piece-spec">
-                <li><span>Medium</span> — Digital collage, archival print</li>
-                <li><span>Dimensions</span> — 18" × 24"</li>
-                <li><span>Available as</span> — Print, made to order</li>
-                <li><span>Edition</span> — Open edition</li>
-                <li><span>Year</span> — 2026</li>
-              </ul>
-              <a href="#shop" class="piece-link">View / Inquire →</a>
+              <div class="piece-versions">
+                <button
+                  type="button"
+                  class="piece-version"
+                  data-target="prints"
+                  aria-expanded="false"
+                >
+                  <span class="version-label">Prints</span>
+                  <span class="version-detail">12" × 18" — open release</span>
+                </button>
+                <div class="version-specs" data-specs="prints">
+                  <ul class="piece-spec">
+                    <li><span>Medium</span> Digital collage, archival print</li>
+                    <li><span>Dimensions</span> 12" × 18"</li>
+                    <li><span>Available as</span> Print, made to order</li>
+                    <li><span>Edition</span> Open release</li>
+                    <li><span>Year</span> 2026</li>
+                  </ul>
+                  <a
+                    href="https://hpntk.bigcartel.com"
+                    target="_blank"
+                    rel="noopener"
+                    class="piece-link"
+                    >Shop →</a
+                  >
+                </div>
+
+                <button
+                  type="button"
+                  class="piece-version"
+                  data-target="limited"
+                  aria-expanded="false"
+                >
+                  <span class="version-label">Limited Edition</span>
+                  <span class="version-detail"
+                    >18" × 24" — archival, high quality</span
+                  >
+                  <span class="version-status"></span>
+                </button>
+                <div class="version-specs" data-specs="limited">
+                  <ul class="piece-spec">
+                    <li><span>Medium</span> Digital collage, archival print</li>
+                    <li><span>Dimensions</span> 18" × 24"</li>
+                    <li><span>Available as</span> Print, made to order</li>
+                    <li><span>Edition</span> Open edition</li>
+                    <li><span>Year</span> 2026</li>
+                  </ul>
+                  <span class="version-status">Coming soon</span>
+                </div>
+              </div>
             </div>
           </article>
         </div>
@@ -153,7 +195,13 @@
         Original works, limited editions, and prints — made to order, shipped to
         you.
       </p>
-      <a href="#" class="shop-button">Enter the shop (coming soon)</a>
+      <a
+        href="https://hpntk.bigcartel.com"
+        target="_blank"
+        rel="noopener"
+        class="shop-button"
+        >Enter the shop</a
+      >
     </section>
 
     <section id="about" class="about">
@@ -250,6 +298,38 @@
         } else {
           window.addEventListener("load", tryPlay);
         }
+      })();
+
+      // Piece version accordion — clicking "Prints" or "Limited Edition"
+      // opens that version's spec panel (only one open at a time per
+      // piece). The piece title slides up in tandem to cue that the card
+      // has expanded, via the .specs-open class on the parent .piece.
+      (function () {
+        document.querySelectorAll(".piece-version").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var piece = btn.closest(".piece");
+            var target = btn.getAttribute("data-target");
+            var specs = piece.querySelector(
+              '.version-specs[data-specs="' + target + '"]',
+            );
+            var wasOpen = btn.getAttribute("aria-expanded") === "true";
+
+            piece.querySelectorAll(".piece-version").forEach(function (b) {
+              b.setAttribute("aria-expanded", "false");
+            });
+            piece.querySelectorAll(".version-specs").forEach(function (s) {
+              s.classList.remove("is-open");
+            });
+
+            if (!wasOpen) {
+              btn.setAttribute("aria-expanded", "true");
+              specs.classList.add("is-open");
+              piece.classList.add("specs-open");
+            } else {
+              piece.classList.remove("specs-open");
+            }
+          });
+        });
       })();
 
       // "Welcome" cycler — lives inside the nav wordmark's hover reveal,

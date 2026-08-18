@@ -125,8 +125,9 @@ p {
   background: var(--bg);
 }
 
-/* Two loops are layered in the same spot; only the active one is
-   visible. Clicking HPNTK below crossfades between them. */
+/* Multiple loops are layered in the same spot; only the active one is
+   visible. Clicking HPNTK below hard-cuts between them, like flipping
+   channels, no crossfade. */
 .hero-video {
   position: absolute;
   inset: 0;
@@ -135,7 +136,6 @@ p {
   object-fit: cover;
   filter: contrast(1.05);
   opacity: 0;
-  transition: opacity 0.8s ease;
 }
 
 .hero-video.is-active {
@@ -236,7 +236,7 @@ p {
 
 .piece {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 64px;
 }
 
@@ -266,6 +266,16 @@ p {
 }
 
 .piece-info h3 { font-size: 1.6rem; margin-bottom: 10px; }
+
+/* When a version's specs open, the title cedes a little room by
+   sliding up — a quiet cue that the card just expanded. */
+.piece-title {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.piece.specs-open .piece-title {
+  transform: translateY(-10px);
+}
 
 .piece-meta {
   font-family: var(--mono);
@@ -319,6 +329,96 @@ img, video {
 }
 
 .piece-link:hover { border-color: var(--acid); }
+
+/* Two purchase paths per piece: open-release prints (live) and a
+   higher-quality limited edition (not yet purchasable — always
+   flagged "coming soon" until that changes). Each is a toggle button
+   that expands its own spec panel below it; see .version-specs. */
+.piece-versions {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 4px;
+}
+
+.piece-version {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 4px 12px;
+  padding: 14px 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.piece-version::after {
+  content: "+";
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--chrome);
+  transition: transform 0.3s ease;
+}
+
+.piece-version[aria-expanded="true"]::after {
+  transform: rotate(45deg);
+}
+
+.version-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--chrome);
+  min-width: 118px;
+}
+
+.version-detail {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-dim);
+  flex: 1 1 auto;
+}
+
+.version-status {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-dim);
+  opacity: 0.55;
+  font-style: italic;
+}
+
+/* Collapsed by default; JS toggles .is-open on click. max-height
+   (rather than height/auto) is what makes the collapse animatable. */
+.version-specs {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+.version-specs.is-open {
+  max-height: 280px;
+  opacity: 1;
+  padding-bottom: 16px;
+}
+
+.version-specs .piece-spec {
+  border-top: none;
+  padding-top: 14px;
+  margin-bottom: 12px;
+}
+
+.version-specs .version-status {
+  display: inline-block;
+}
 
 /* ---------- Shop CTA ---------- */
 
