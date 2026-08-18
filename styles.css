@@ -395,8 +395,9 @@ img, video {
 }
 
 .variant-tab img {
-  width: 15.6%;
-  aspect-ratio: 1 / 1;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
   object-fit: cover;
   border: 1px solid rgba(255,255,255,0.1);
   -webkit-user-select: none;
@@ -461,20 +462,122 @@ img, video {
 
 .shop-cta p { margin-bottom: 40px; }
 
-.shop-button {
-  display: inline-block;
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--bg);
-  background: var(--acid);
-  padding: 18px 40px;
-  border-radius: 2px;
-  transition: background 0.2s ease, transform 0.2s ease;
+/* Grid of everything currently for sale. One card per piece, each
+   showing a small preview and its own available / sold-out status
+   (set by hand on the .archive-card element -- see the HTML comment
+   above the markup). Clicking a card reveals what it ran with. */
+.shop-archive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 180px));
+  justify-content: center;
+  gap: 24px;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
-.shop-button:hover { background: var(--ink); transform: translateY(-2px); }
+.archive-card {
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.archive-card-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--bg);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.archive-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.archive-card:hover .archive-card-media img { transform: scale(1.04); }
+
+.archive-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  background: rgba(10, 10, 12, 0.72);
+  backdrop-filter: blur(6px);
+  color: var(--acid);
+}
+
+.archive-card.is-coming-soon .archive-badge {
+  color: var(--ink-dim);
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.archive-card.is-sold-out .archive-badge {
+  color: var(--ink-dim);
+}
+
+.archive-card-title {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  margin-top: 10px;
+}
+
+/* Reuses the same collapsed/expanded pattern as .version-specs. */
+.archive-details {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  max-width: 720px;
+  margin: 0 auto;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+}
+
+.archive-details.is-open {
+  max-height: 220px;
+  opacity: 1;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.archive-details.is-open .variant-tab {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.archive-variant-tab {
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.archive-details .piece-spec {
+  border-top: none;
+  padding-top: 0;
+  text-align: left;
+}
+
+/* Visibility is set in JS based on the card's status class (see the
+   script at the bottom of the page) -- display here is just spacing
+   for when it's shown, not a default state. */
+.archive-shop-link {
+  margin-top: 4px;
+}
 
 /* ---------- About ---------- */
 

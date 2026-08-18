@@ -188,12 +188,19 @@
                     <li><span>Dimensions</span> 12" × 18"</li>
                     <li><span>Available as</span> Print, made to order</li>
                     <li>
-                      <span>Edition</span> 480 total — 80 each of 6 variants,
-                      assigned at random
+                      <span>Edition</span> Open edition — assigned at random
+                      across 6 variants
                     </li>
+                    <li><span>Price</span> $45</li>
                     <li><span>Year</span> 2026</li>
                   </ul>
-                  <span class="version-status">Coming soon</span>
+                  <a
+                    href="https://hpntk.bigcartel.com"
+                    target="_blank"
+                    rel="noopener"
+                    class="piece-link"
+                    >Shop →</a
+                  >
                 </div>
 
                 <button
@@ -213,10 +220,17 @@
                     <li><span>Medium</span> Digital collage, archival print</li>
                     <li><span>Dimensions</span> 18" × 24"</li>
                     <li><span>Available as</span> Print, made to order</li>
-                    <li><span>Edition</span> 180, numbered, while they last</li>
+                    <li><span>Edition</span> Open edition</li>
+                    <li><span>Price</span> $90</li>
                     <li><span>Year</span> 2026</li>
                   </ul>
-                  <span class="version-status">Coming soon</span>
+                  <a
+                    href="https://hpntk.bigcartel.com"
+                    target="_blank"
+                    rel="noopener"
+                    class="piece-link"
+                    >Shop →</a
+                  >
                 </div>
               </div>
             </div>
@@ -231,13 +245,59 @@
         Original works, limited editions, and prints — made to order, shipped to
         you.
       </p>
-      <a
-        href="https://hpntk.bigcartel.com"
-        target="_blank"
-        rel="noopener"
-        class="shop-button"
-        >Enter the shop</a
-      >
+      <div class="shop-archive">
+        <!--
+          One archive-card per piece. Status is set by hand: the card
+          takes exactly one of is-coming-soon / is-available / is-sold-out,
+          and the badge text below should match (Coming soon / Available /
+          Sold out). The Shop link at the bottom of the details panel
+          shows itself automatically only when the card is is-available --
+          see the script at the bottom of the page.
+        -->
+        <button
+          type="button"
+          class="archive-card is-available"
+          data-target="archive-a-beautiful"
+          aria-expanded="false"
+        >
+          <span class="archive-card-media">
+            <img
+              src="assets/archive-a-beautiful-thumb.jpg"
+              alt="A Beautiful..."
+              draggable="false"
+              oncontextmenu="return false;"
+            />
+            <span class="archive-badge">Available</span>
+          </span>
+          <span class="archive-card-title">A Beautiful...</span>
+        </button>
+      </div>
+      <div class="archive-details" data-specs="archive-a-beautiful">
+        <div class="variant-tab archive-variant-tab" aria-hidden="true">
+          <img src="assets/variants/00-signature-thumb.jpg" alt="" draggable="false" oncontextmenu="return false;" />
+          <img src="assets/variants/01-rose-thumb.jpg" alt="" draggable="false" oncontextmenu="return false;" />
+          <img src="assets/variants/02-acid-thumb.jpg" alt="" draggable="false" oncontextmenu="return false;" />
+          <img src="assets/variants/03-electric-thumb.jpg" alt="" draggable="false" oncontextmenu="return false;" />
+          <img src="assets/variants/04-chrome-thumb.jpg" alt="" draggable="false" oncontextmenu="return false;" />
+          <img src="assets/variants/05-interruption-thumb.jpg" alt="" draggable="false" oncontextmenu="return false;" />
+        </div>
+        <ul class="piece-spec">
+          <li>
+            <span>Ran with</span> Signature, Rose, Acid, Electric, Chrome,
+            Interruption
+          </li>
+          <li><span>Prints</span> 12" × 18" — open edition, $45, random of 6 variants</li>
+          <li><span>Limited Edition</span> 18" × 24" — open edition, $90</li>
+          <li><span>Year</span> 2026</li>
+        </ul>
+        <a
+          href="https://hpntk.bigcartel.com"
+          target="_blank"
+          rel="noopener"
+          class="piece-link archive-shop-link"
+          >Shop →</a
+        >
+      </div>
     </section>
 
     <section id="about" class="about">
@@ -363,6 +423,49 @@
               piece.classList.add("specs-open");
             } else {
               piece.classList.remove("specs-open");
+            }
+          });
+        });
+      })();
+
+      // Shop archive — clicking a piece's card reveals what it ran with
+      // (variants, sizes, edition counts) in a panel below the grid.
+      // Independent of the piece-version accordion above; only one
+      // archive card's details show at a time. The Shop link inside
+      // each details panel only appears when its card is is-available --
+      // driven entirely by the card's status class, set by hand above.
+      (function () {
+        document.querySelectorAll(".archive-card").forEach(function (card) {
+          var target = card.getAttribute("data-target");
+          var details = document.querySelector(
+            '.archive-details[data-specs="' + target + '"]',
+          );
+          var shopLink = details
+            ? details.querySelector(".archive-shop-link")
+            : null;
+          if (shopLink) {
+            shopLink.style.display = card.classList.contains("is-available")
+              ? "inline-block"
+              : "none";
+          }
+
+          card.addEventListener("click", function () {
+            var target = card.getAttribute("data-target");
+            var details = document.querySelector(
+              '.archive-details[data-specs="' + target + '"]',
+            );
+            var wasOpen = card.getAttribute("aria-expanded") === "true";
+
+            document.querySelectorAll(".archive-card").forEach(function (c) {
+              c.setAttribute("aria-expanded", "false");
+            });
+            document.querySelectorAll(".archive-details").forEach(function (d) {
+              d.classList.remove("is-open");
+            });
+
+            if (!wasOpen) {
+              card.setAttribute("aria-expanded", "true");
+              details.classList.add("is-open");
             }
           });
         });
