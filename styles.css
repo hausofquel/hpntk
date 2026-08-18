@@ -375,7 +375,31 @@ img, video {
   text-transform: uppercase;
   color: var(--chrome);
   min-width: 118px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
+
+/* A quiet nod that this version comes in more than one look --
+   no label, no tooltip, just a small cluster of marks. */
+.variant-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.variant-dots .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-1 { background: var(--ink-dim); }
+.dot-2 { background: var(--rose); }
+.dot-3 { background: var(--acid); }
+.dot-4 { background: var(--electric); }
+.dot-5 { background: var(--chrome); }
+.dot-6 { background: transparent; border: 1px solid var(--ink-dim); }
 
 .version-detail {
   font-family: var(--mono);
