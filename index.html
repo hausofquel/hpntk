@@ -108,6 +108,32 @@
       </div>
     </section>
 
+    <section id="drop" class="drop-counter">
+      <p class="drop-label">First drop</p>
+      <h2 class="drop-date">Saturday, Aug 29</h2>
+      <div class="drop-clock" aria-live="off">
+        <div class="drop-unit">
+          <span class="drop-num" data-unit="days">00</span>
+          <span class="drop-unit-label">Days</span>
+        </div>
+        <div class="drop-unit">
+          <span class="drop-num" data-unit="hours">00</span>
+          <span class="drop-unit-label">Hrs</span>
+        </div>
+        <div class="drop-unit">
+          <span class="drop-num" data-unit="minutes">00</span>
+          <span class="drop-unit-label">Min</span>
+        </div>
+        <div class="drop-unit">
+          <span class="drop-num" data-unit="seconds">00</span>
+          <span class="drop-unit-label">Sec</span>
+        </div>
+      </div>
+      <p class="drop-note">
+        Preorders open Sat, Aug 29 — through Oct 10, while supplies last.
+      </p>
+    </section>
+
     <section id="work" class="archive">
       <div class="archive-inner">
         <h2>From the archive</h2>
@@ -187,11 +213,11 @@
                     <li><span>Medium</span> Digital collage, archival print</li>
                     <li><span>Dimensions</span> 12" × 18"</li>
                     <li><span>Available as</span> Print, made to order</li>
-                    <li>
-                      <span>Edition</span> Open edition — assigned at random
-                      across 6 variants
-                    </li>
+                    <li><span>Edition</span> Open edition — 6 variants</li>
                     <li><span>Price</span> $45</li>
+                    <li>
+                      <span>Window</span> Aug 29 – Oct 10, while supplies last
+                    </li>
                     <li><span>Year</span> 2026</li>
                   </ul>
                   <span class="version-status">Coming soon</span>
@@ -216,6 +242,9 @@
                     <li><span>Available as</span> Print, made to order</li>
                     <li><span>Edition</span> Open edition</li>
                     <li><span>Price</span> $90</li>
+                    <li>
+                      <span>Window</span> Aug 29 – Oct 10, while supplies last
+                    </li>
                     <li><span>Year</span> 2026</li>
                   </ul>
                   <span class="version-status">Coming soon</span>
@@ -274,8 +303,11 @@
             <span>Ran with</span> Signature, Rose, Acid, Electric, Chrome,
             Interruption
           </li>
-          <li><span>Prints</span> 12" × 18" — open edition, $45, random of 6 variants</li>
+          <li><span>Prints</span> 12" × 18" — open edition, $45, 6 variants</li>
           <li><span>Limited Edition</span> 18" × 24" — open edition, $90</li>
+          <li>
+            <span>Window</span> Aug 29 – Oct 10, while supplies last
+          </li>
           <li><span>Year</span> 2026</li>
         </ul>
         <a
@@ -382,6 +414,57 @@
         } else {
           window.addEventListener("load", tryPlay);
         }
+      })();
+
+      // Drop countdown — ticks down to the first drop (Sat, Aug 29, 2026,
+      // midnight local time). Adjust DROP_TARGET below if the date/time
+      // changes.
+      // Once it hits zero, the clock just holds at 00:00:00:00 — flipping
+      // pieces to "Available" is still a manual step (see the archive-card
+      // comment above).
+      (function () {
+        var clock = document.querySelector(".drop-clock");
+        if (!clock) return;
+
+        var DROP_TARGET = new Date(2026, 7, 29, 0, 0, 0).getTime(); // Aug 29, 2026, 12:00 AM local
+
+        var els = {
+          days: clock.querySelector('[data-unit="days"]'),
+          hours: clock.querySelector('[data-unit="hours"]'),
+          minutes: clock.querySelector('[data-unit="minutes"]'),
+          seconds: clock.querySelector('[data-unit="seconds"]'),
+        };
+
+        var pad = function (n) {
+          return String(n).padStart(2, "0");
+        };
+
+        var tick = function () {
+          var diff = DROP_TARGET - Date.now();
+          if (diff <= 0) {
+            els.days.textContent = "00";
+            els.hours.textContent = "00";
+            els.minutes.textContent = "00";
+            els.seconds.textContent = "00";
+            return;
+          }
+          var totalSeconds = Math.floor(diff / 1000);
+          var days = Math.floor(totalSeconds / 86400);
+          var hours = Math.floor((totalSeconds % 86400) / 3600);
+          var minutes = Math.floor((totalSeconds % 3600) / 60);
+          var seconds = totalSeconds % 60;
+
+          els.days.textContent = pad(days);
+          els.hours.textContent = pad(hours);
+          els.minutes.textContent = pad(minutes);
+          els.seconds.textContent = pad(seconds);
+
+          requestAnimationFrame(function () {
+            setTimeout(tick, 1000 - (Date.now() % 1000));
+          });
+        };
+
+        tick();
       })();
 
       // Piece version accordion — clicking "Prints" or "Limited Edition"

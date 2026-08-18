@@ -209,6 +209,68 @@ p {
   100% { transform: translateY(0); opacity: 1; }
 }
 
+/* ---------- Drop countdown ---------- */
+
+.drop-counter {
+  text-align: center;
+  padding: 90px 5vw;
+  background: var(--bg-raised);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.drop-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--electric);
+  margin-bottom: 10px;
+}
+
+.drop-date {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin-bottom: 32px;
+}
+
+.drop-clock {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 40px);
+  margin-bottom: 24px;
+}
+
+.drop-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 56px;
+}
+
+.drop-num {
+  font-family: var(--mono);
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  color: var(--acid);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.drop-unit-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin-top: 8px;
+}
+
+.drop-note {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+}
+
 /* ---------- Archive / Featured work ---------- */
 
 .archive { padding: 100px 5vw 140px; }
