@@ -375,31 +375,34 @@ img, video {
   text-transform: uppercase;
   color: var(--chrome);
   min-width: 118px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
-/* A quiet nod that this version comes in more than one look --
-   no label, no tooltip, just a small cluster of marks. */
-.variant-dots {
-  display: inline-flex;
-  gap: 3px;
+/* The six actual variations, shown as a flush row of thumbnails once
+   the Prints panel is opened -- pops in a beat after the panel
+   expands rather than appearing instantly. */
+.variant-tab {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
 }
 
-.variant-dots .dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  display: inline-block;
+.version-specs.is-open .variant-tab {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.dot-1 { background: var(--ink-dim); }
-.dot-2 { background: var(--rose); }
-.dot-3 { background: var(--acid); }
-.dot-4 { background: var(--electric); }
-.dot-5 { background: var(--chrome); }
-.dot-6 { background: transparent; border: 1px solid var(--ink-dim); }
+.variant-tab img {
+  width: 15.6%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.1);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
 
 .version-detail {
   font-family: var(--mono);
@@ -429,7 +432,7 @@ img, video {
 }
 
 .version-specs.is-open {
-  max-height: 280px;
+  max-height: 320px;
   opacity: 1;
   padding-bottom: 16px;
 }
