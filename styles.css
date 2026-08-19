@@ -414,6 +414,16 @@ p {
   margin-bottom: 16px;
 }
 
+.donation-count-line {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
 /* ---------- Archive / Featured work ---------- */
 
 .archive { padding: 100px 5vw 140px; }

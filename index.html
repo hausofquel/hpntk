@@ -110,7 +110,6 @@
 
     <section id="drop" class="drop-counter">
       <p class="drop-label">First drop</p>
-      <h2 class="drop-date">Saturday, Aug 29</h2>
       <div class="drop-clock" aria-live="off">
         <span class="seg-group" data-unit="days"><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span></span>
         <span class="seg-colon"><i></i><i></i></span>
@@ -433,6 +432,13 @@
           raising the quality of what HPNTK makes next. 10% of every run
           goes to sponsoring schools and extracurricular organizations.
         </p>
+        <!-- Count is live, not hand-edited -- api/stripe-webhook.js
+             updates it for real every time either link gets a real
+             completed payment. -->
+        <p class="donation-count-line">
+          <span id="donation-total">$0</span> raised ·
+          <span id="donor-count">0</span> donors
+        </p>
         <div class="invest-links">
           <a
             href="https://buy.stripe.com/5kQdRb6bz59nbAR1FWa7C02"
@@ -672,7 +678,7 @@
 
       // Preorder count — reads the real total from the same counting
       // service the hype meter uses. This one is never incremented from
-      // the browser: api/preorder-webhook.js bumps it server-side, only
+      // the browser: api/stripe-webhook.js bumps it server-side, only
       // after verifying a real Stripe payment came in. This script just
       // displays whatever that count currently is.
       (function () {
@@ -688,6 +694,44 @@
           })
           .then(function (data) {
             countEl.textContent = data.value || 0;
+          })
+          .catch(function () {});
+      })();
+
+      // Donation tracker — same pattern as the preorder count above: this
+      // script only ever reads, api/stripe-webhook.js does the real
+      // incrementing server-side after verifying the payment. Shows both
+      // the running dollar total and how many separate donations have
+      // come in.
+      (function () {
+        var totalEl = document.getElementById("donation-total");
+        var donorEl = document.getElementById("donor-count");
+        if (!totalEl || !donorEl) return;
+
+        var API = "https://countapi.mileshilliard.com/api/v1/";
+        var TOTAL_KEY = "hpntk-co-donation-total-cents-2026";
+        var DONOR_KEY = "hpntk-co-donor-count-2026";
+
+        var formatDollars = function (cents) {
+          var dollars = Math.round(cents) / 100;
+          return "$" + dollars.toLocaleString("en-US");
+        };
+
+        fetch(API + "get/" + TOTAL_KEY)
+          .then(function (r) {
+            return r.ok ? r.json() : { value: 0 };
+          })
+          .then(function (data) {
+            totalEl.textContent = formatDollars(Number(data.value) || 0);
+          })
+          .catch(function () {});
+
+        fetch(API + "get/" + DONOR_KEY)
+          .then(function (r) {
+            return r.ok ? r.json() : { value: 0 };
+          })
+          .then(function (data) {
+            donorEl.textContent = data.value || 0;
           })
           .catch(function () {});
       })();
