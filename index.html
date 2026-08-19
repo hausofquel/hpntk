@@ -135,7 +135,7 @@
         </p>
 
         <div class="archive-grid">
-          <article class="piece">
+          <article class="piece is-active">
             <div class="piece-media">
               <img
                 src="assets/statue-web.jpg"
@@ -242,6 +242,74 @@
               </div>
             </div>
           </article>
+          <!-- Add each new piece as another <article class="piece"> here,
+               same structure as the one above (piece-media / piece-info /
+               piece-versions). No need to touch the pager below -- it
+               reads however many .piece articles exist and numbers
+               itself automatically, hiding all but the active one. -->
+        </div>
+
+        <nav class="piece-pager" aria-label="Browse pieces">
+          <button
+            type="button"
+            class="piece-pager-arrow piece-pager-prev"
+            aria-label="Previous piece"
+          >
+            ‹
+          </button>
+          <div class="piece-pager-numbers"></div>
+          <button
+            type="button"
+            class="piece-pager-arrow piece-pager-next"
+            aria-label="Next piece"
+          >
+            ›
+          </button>
+        </nav>
+      </div>
+    </section>
+
+    <section id="hype" class="hype-preorder">
+      <div class="hype-block">
+        <h3>Hype meter</h3>
+        <p>
+          Real taps from real people — no fake numbers here. Tap in if
+          you're excited for the drop.
+        </p>
+        <button type="button" class="hype-btn" id="hype-tap">
+          I'm hyped →
+        </button>
+        <p class="hype-count-line">
+          <span id="hype-count">0</span> hyped so far
+        </p>
+      </div>
+      <div class="preorder-block">
+        <h3>Preorder</h3>
+        <p>
+          Lock in a piece before the drop opens — first come, first
+          shipped.
+        </p>
+        <!-- Count is live, not hand-edited -- api/preorder-webhook.js
+             bumps it for real every time one of these two Stripe links
+             gets a real completed payment. -->
+        <p class="preorder-count-line">
+          <span id="preorder-count">0</span> preordered so far
+        </p>
+        <div class="invest-links">
+          <a
+            href="https://buy.stripe.com/dRm28t6bzcBPawNgAQa7C03"
+            target="_blank"
+            rel="noopener"
+            class="piece-link preorder-link"
+            >Preorder 18" × 24" →</a
+          >
+          <a
+            href="https://buy.stripe.com/cNi00l8jHbxL0Wdacsa7C04"
+            target="_blank"
+            rel="noopener"
+            class="piece-link preorder-link"
+            >Preorder 12" × 18" →</a
+          >
         </div>
       </div>
     </section>
@@ -385,6 +453,10 @@
     </section>
 
     <footer id="contact" class="site-footer">
+      <p class="social-callout">
+        By popular demand, we've moved our business to social media —
+        follow along.
+      </p>
       <div class="social-links">
         <a
           href="https://www.instagram.com/hpntk.co/"
@@ -547,6 +619,143 @@
         };
 
         tick();
+      })();
+
+      // Hype meter — a real tap counter, not a fabricated number. Backed
+      // by a free, no-signup public counting API (countapi.mileshilliard.com):
+      // GET /get/KEY reads the current value without incrementing it,
+      // GET /hit/KEY increments it by 1. The key is a public string, so
+      // treat the count as "real taps this service has seen," not a
+      // tamper-proof metric. One tap per visitor is enforced client-side
+      // via localStorage so a single person can't mash the button to
+      // inflate it themselves.
+      (function () {
+        var btn = document.getElementById("hype-tap");
+        var countEl = document.getElementById("hype-count");
+        if (!btn || !countEl) return;
+
+        var API = "https://countapi.mileshilliard.com/api/v1/";
+        var KEY = "hpntk-co-a-beautiful-hype-2026";
+        var STORAGE_KEY = "hpntk_hyped_a_beautiful";
+
+        fetch(API + "get/" + KEY)
+          .then(function (r) {
+            return r.ok ? r.json() : { value: 0 };
+          })
+          .then(function (data) {
+            countEl.textContent = data.value || 0;
+          })
+          .catch(function () {});
+
+        if (localStorage.getItem(STORAGE_KEY)) {
+          btn.disabled = true;
+          btn.textContent = "You're counted →";
+        }
+
+        btn.addEventListener("click", function () {
+          if (btn.disabled) return;
+          btn.disabled = true;
+          fetch(API + "hit/" + KEY)
+            .then(function (r) {
+              return r.json();
+            })
+            .then(function (data) {
+              countEl.textContent = data.value;
+              localStorage.setItem(STORAGE_KEY, "1");
+              btn.textContent = "You're counted →";
+            })
+            .catch(function () {
+              btn.disabled = false;
+            });
+        });
+      })();
+
+      // Preorder count — reads the real total from the same counting
+      // service the hype meter uses. This one is never incremented from
+      // the browser: api/preorder-webhook.js bumps it server-side, only
+      // after verifying a real Stripe payment came in. This script just
+      // displays whatever that count currently is.
+      (function () {
+        var countEl = document.getElementById("preorder-count");
+        if (!countEl) return;
+
+        var API = "https://countapi.mileshilliard.com/api/v1/";
+        var KEY = "hpntk-co-a-beautiful-preorder-2026";
+
+        fetch(API + "get/" + KEY)
+          .then(function (r) {
+            return r.ok ? r.json() : { value: 0 };
+          })
+          .then(function (data) {
+            countEl.textContent = data.value || 0;
+          })
+          .catch(function () {});
+      })();
+
+      // Piece pager — flips through however many <article class="piece">
+      // elements exist in .archive-grid, showing one at a time at full
+      // size. Fully driven by the DOM: add a new .piece article and this
+      // automatically grows to "‹ 1 2 ›" etc, no numbers to hand-maintain.
+      (function () {
+        var grid = document.querySelector(".archive-grid");
+        var pager = document.querySelector(".piece-pager");
+        if (!grid || !pager) return;
+
+        var pieces = Array.prototype.slice.call(
+          grid.querySelectorAll(".piece"),
+        );
+        if (!pieces.length) return;
+
+        var numbersWrap = pager.querySelector(".piece-pager-numbers");
+        var prevBtn = pager.querySelector(".piece-pager-prev");
+        var nextBtn = pager.querySelector(".piece-pager-next");
+
+        var current = pieces.findIndex(function (p) {
+          return p.classList.contains("is-active");
+        });
+        if (current < 0) current = 0;
+
+        var numberBtns = pieces.map(function (piece, i) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "piece-pager-num";
+          btn.textContent = String(i + 1);
+          btn.setAttribute("aria-label", "Show piece " + (i + 1));
+          btn.addEventListener("click", function () {
+            goTo(i);
+          });
+          numbersWrap.appendChild(btn);
+          return btn;
+        });
+
+        function render() {
+          pieces.forEach(function (piece, i) {
+            piece.classList.toggle("is-active", i === current);
+          });
+          numberBtns.forEach(function (btn, i) {
+            btn.classList.toggle("is-active", i === current);
+          });
+          prevBtn.disabled = current <= 0;
+          nextBtn.disabled = current >= pieces.length - 1;
+          // Only one piece exists yet -- nothing to flip to either
+          // direction, and no point highlighting a single page number.
+          pager.classList.toggle("has-single-piece", pieces.length <= 1);
+        }
+
+        function goTo(index) {
+          if (index < 0 || index >= pieces.length) return;
+          current = index;
+          render();
+        }
+
+        prevBtn.addEventListener("click", function () {
+          goTo(current - 1);
+        });
+        nextBtn.addEventListener("click", function () {
+          goTo(current + 1);
+        });
+
+        render();
       })();
 
       // Piece version accordion — clicking "Prints" or "Limited Edition"
