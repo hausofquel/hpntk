@@ -112,23 +112,15 @@
       <p class="drop-label">First drop</p>
       <h2 class="drop-date">Saturday, Aug 29</h2>
       <div class="drop-clock" aria-live="off">
-        <div class="drop-unit">
-          <span class="drop-num" data-unit="days">00</span>
-          <span class="drop-unit-label">Days</span>
-        </div>
-        <div class="drop-unit">
-          <span class="drop-num" data-unit="hours">00</span>
-          <span class="drop-unit-label">Hrs</span>
-        </div>
-        <div class="drop-unit">
-          <span class="drop-num" data-unit="minutes">00</span>
-          <span class="drop-unit-label">Min</span>
-        </div>
-        <div class="drop-unit">
-          <span class="drop-num" data-unit="seconds">00</span>
-          <span class="drop-unit-label">Sec</span>
-        </div>
+        <span class="seg-group" data-unit="days"><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span></span>
+        <span class="seg-colon"><i></i><i></i></span>
+        <span class="seg-group" data-unit="hours"><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span></span>
+        <span class="seg-colon"><i></i><i></i></span>
+        <span class="seg-group" data-unit="minutes"><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span></span>
+        <span class="seg-colon"><i></i><i></i></span>
+        <span class="seg-group" data-unit="seconds"><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span><span class="seg-digit"><i class="seg seg-a"></i><i class="seg seg-b"></i><i class="seg seg-c"></i><i class="seg seg-d"></i><i class="seg seg-e"></i><i class="seg seg-f"></i><i class="seg seg-g"></i></span></span>
       </div>
+      <p class="drop-clock-legend">Days : Hrs : Min : Sec</p>
       <p class="drop-note">
         Sale opens Sat, Aug 29 — through Oct 10, while supplies last.
       </p>
@@ -291,36 +283,42 @@
         <div class="variant-tab archive-variant-tab" aria-hidden="true">
           <img
             src="assets/variants/00-signature-thumb.jpg"
+            data-hover-preview="assets/variants/00-signature-hover.jpg"
             alt=""
             draggable="false"
             oncontextmenu="return false;"
           />
           <img
             src="assets/variants/01-rose-thumb.jpg"
+            data-hover-preview="assets/variants/01-rose-hover.jpg"
             alt=""
             draggable="false"
             oncontextmenu="return false;"
           />
           <img
             src="assets/variants/02-acid-thumb.jpg"
+            data-hover-preview="assets/variants/02-acid-hover.jpg"
             alt=""
             draggable="false"
             oncontextmenu="return false;"
           />
           <img
             src="assets/variants/03-electric-thumb.jpg"
+            data-hover-preview="assets/variants/03-electric-hover.jpg"
             alt=""
             draggable="false"
             oncontextmenu="return false;"
           />
           <img
             src="assets/variants/04-chrome-thumb.jpg"
+            data-hover-preview="assets/variants/04-chrome-hover.jpg"
             alt=""
             draggable="false"
             oncontextmenu="return false;"
           />
           <img
             src="assets/variants/05-interruption-thumb.jpg"
+            data-hover-preview="assets/variants/05-interruption-hover.jpg"
             alt=""
             draggable="false"
             oncontextmenu="return false;"
@@ -328,7 +326,7 @@
         </div>
         <ul class="piece-spec">
           <li>
-            <span>Ran with</span> Signature, Rose, Acid, Electric, Chrome,
+            <span>Runs with</span> Signature, Rose, Acid, Electric, Chrome,
             Glitch
           </li>
           <li><span>Prints</span> 12" × 18" — open edition, $45, 6 variants</li>
@@ -347,16 +345,36 @@
     </section>
 
     <section id="about" class="about">
-      <h2>What HPNTK means</h2>
-      <p>
-        HPNTK is a creative studio exploring digital art, motion, and
-        experimental media — dedicated to studying altered states of perception
-        and building a visual language for the parts of identity and experience
-        that resist a single, fixed image. The medium may change, but the
-        purpose stays the same: inviting anyone who encounters the work to look
-        longer, question what's real, and find their own reflection in the
-        distortion.
-      </p>
+      <div class="about-main">
+        <h2>What HPNTK means</h2>
+        <p>
+          HPNTK is a creative studio exploring digital art, motion, and
+          experimental media — dedicated to studying altered states of
+          perception and building a visual language for the parts of
+          identity and experience that resist a single, fixed image. The
+          medium may change, but the purpose stays the same: inviting
+          anyone who encounters the work to look longer, question what's
+          real, and find their own reflection in the distortion.
+        </p>
+      </div>
+      <div class="about-invest">
+        <h3>Fund the Work</h3>
+        <p>
+          Every run pushes the work further — better materials, sharper
+          production, more ambitious pieces. Support goes directly toward
+          raising the quality of what HPNTK makes next. When a run closes,
+          it closes by sponsoring a charity or event chosen to match it.
+        </p>
+        <!-- Placeholder until a real investment/funding platform is set
+             up — swap the href when that's ready. -->
+        <a
+          href="#"
+          target="_blank"
+          rel="noopener"
+          class="piece-link invest-link"
+          >Invest →</a
+        >
+      </div>
     </section>
 
     <footer id="contact" class="site-footer">
@@ -454,11 +472,42 @@
 
         var DROP_TARGET = new Date(2026, 7, 29, 0, 0, 0).getTime(); // Aug 29, 2026, 12:00 AM local
 
-        var els = {
-          days: clock.querySelector('[data-unit="days"]'),
-          hours: clock.querySelector('[data-unit="hours"]'),
-          minutes: clock.querySelector('[data-unit="minutes"]'),
-          seconds: clock.querySelector('[data-unit="seconds"]'),
+        // Which of the 7 segments (a,b,c,d,e,f,g) are lit for each digit.
+        var SEGMENT_MAP = {
+          "0": [1, 1, 1, 1, 1, 1, 0],
+          "1": [0, 1, 1, 0, 0, 0, 0],
+          "2": [1, 1, 0, 1, 1, 0, 1],
+          "3": [1, 1, 1, 1, 0, 0, 1],
+          "4": [0, 1, 1, 0, 0, 1, 1],
+          "5": [1, 0, 1, 1, 0, 1, 1],
+          "6": [1, 0, 1, 1, 1, 1, 1],
+          "7": [1, 1, 1, 0, 0, 0, 0],
+          "8": [1, 1, 1, 1, 1, 1, 1],
+          "9": [1, 1, 1, 1, 0, 1, 1],
+        };
+        var SEGMENT_ORDER = ["a", "b", "c", "d", "e", "f", "g"];
+
+        var groups = {
+          days: clock.querySelector('.seg-group[data-unit="days"]'),
+          hours: clock.querySelector('.seg-group[data-unit="hours"]'),
+          minutes: clock.querySelector('.seg-group[data-unit="minutes"]'),
+          seconds: clock.querySelector('.seg-group[data-unit="seconds"]'),
+        };
+
+        var setDigit = function (digitEl, value) {
+          var map = SEGMENT_MAP[value] || SEGMENT_MAP["0"];
+          SEGMENT_ORDER.forEach(function (letter, i) {
+            var seg = digitEl.querySelector(".seg-" + letter);
+            if (!seg) return;
+            seg.classList.toggle("is-on", !!map[i]);
+          });
+        };
+
+        var setGroup = function (groupEl, twoDigits) {
+          if (!groupEl) return;
+          var digits = groupEl.querySelectorAll(".seg-digit");
+          setDigit(digits[0], twoDigits[0]);
+          setDigit(digits[1], twoDigits[1]);
         };
 
         var pad = function (n) {
@@ -468,10 +517,10 @@
         var tick = function () {
           var diff = DROP_TARGET - Date.now();
           if (diff <= 0) {
-            els.days.textContent = "00";
-            els.hours.textContent = "00";
-            els.minutes.textContent = "00";
-            els.seconds.textContent = "00";
+            setGroup(groups.days, "00");
+            setGroup(groups.hours, "00");
+            setGroup(groups.minutes, "00");
+            setGroup(groups.seconds, "00");
             return;
           }
           var totalSeconds = Math.floor(diff / 1000);
@@ -480,10 +529,10 @@
           var minutes = Math.floor((totalSeconds % 3600) / 60);
           var seconds = totalSeconds % 60;
 
-          els.days.textContent = pad(days);
-          els.hours.textContent = pad(hours);
-          els.minutes.textContent = pad(minutes);
-          els.seconds.textContent = pad(seconds);
+          setGroup(groups.days, pad(days));
+          setGroup(groups.hours, pad(hours));
+          setGroup(groups.minutes, pad(minutes));
+          setGroup(groups.seconds, pad(seconds));
 
           requestAnimationFrame(function () {
             setTimeout(tick, 1000 - (Date.now() % 1000));
@@ -564,6 +613,42 @@
               card.setAttribute("aria-expanded", "true");
               details.classList.add("is-open");
             }
+          });
+        });
+      })();
+
+      // Archive variant hover preview — once a card's details are open,
+      // hovering one of the little example pictures swaps that card's
+      // main image to a bigger look at that specific variant, snapping
+      // back to the original the moment the cursor leaves the thumbnail.
+      (function () {
+        document.querySelectorAll(".archive-card").forEach(function (card) {
+          var target = card.getAttribute("data-target");
+          var details = document.querySelector(
+            '.archive-details[data-specs="' + target + '"]',
+          );
+          var mainImg = card.querySelector(".archive-card-media img");
+          if (!details || !mainImg) return;
+
+          var originalSrc = mainImg.getAttribute("src");
+          var thumbs = details.querySelectorAll(
+            ".archive-variant-tab img[data-hover-preview]",
+          );
+          if (!thumbs.length) return;
+
+          thumbs.forEach(function (thumb) {
+            var previewSrc = thumb.getAttribute("data-hover-preview");
+
+            var pre = new Image();
+            pre.src = previewSrc;
+
+            thumb.addEventListener("mouseenter", function () {
+              mainImg.src = previewSrc;
+            });
+
+            thumb.addEventListener("mouseleave", function () {
+              mainImg.src = originalSrc;
+            });
           });
         });
       })();

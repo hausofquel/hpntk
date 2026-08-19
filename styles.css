@@ -232,35 +232,107 @@ p {
   margin-bottom: 32px;
 }
 
+/* Digital-clock readout: dark LED bezel housing a true 7-segment
+   display (the actual segment shapes, not a font) -- the old
+   calculator/alarm-clock look, not a typeface standing in for it.
+   Unlit segments stay faintly visible (the "ghost" segments a real
+   LED/LCD shows when off); lit ones glow acid green. */
 .drop-clock {
-  display: flex;
-  justify-content: center;
-  gap: clamp(16px, 4vw, 40px);
-  margin-bottom: 24px;
-}
-
-.drop-unit {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
   align-items: center;
-  min-width: 56px;
+  justify-content: center;
+  margin: 0 auto 14px;
+  padding: 16px clamp(16px, 4vw, 32px);
+  background: #050705;
+  border: 1px solid rgba(195, 217, 46, 0.28);
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 26px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(195, 217, 46, 0.12);
 }
 
-.drop-num {
-  font-family: var(--mono);
-  font-size: clamp(1.8rem, 5vw, 3rem);
-  color: var(--acid);
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
+.seg-group {
+  display: inline-flex;
 }
 
-.drop-unit-label {
+.seg-digit {
+  position: relative;
+  width: clamp(20px, 6vw, 32px);
+  aspect-ratio: 46 / 80;
+  margin: 0 clamp(2px, 0.6vw, 4px);
+}
+
+.seg {
+  position: absolute;
+  background: rgba(195, 217, 46, 0.07);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.seg.is-on {
+  background: var(--acid);
+  box-shadow:
+    0 0 5px rgba(195, 217, 46, 0.9),
+    0 0 14px rgba(195, 217, 46, 0.6),
+    0 0 30px rgba(195, 217, 46, 0.35);
+}
+
+/* horizontal segments: top, middle, bottom */
+.seg-a, .seg-d, .seg-g {
+  left: 12%;
+  width: 76%;
+  height: 11%;
+  clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
+}
+
+.seg-a { top: 0; }
+.seg-g { top: 44.5%; }
+.seg-d { bottom: 0; }
+
+/* vertical segments: upper-left/right, lower-left/right */
+.seg-b, .seg-c, .seg-e, .seg-f {
+  width: 13%;
+  height: 43%;
+  clip-path: polygon(0% 10%, 50% 0%, 100% 10%, 100% 90%, 50% 100%, 0% 90%);
+}
+
+.seg-f { top: 5.5%; left: 0; }
+.seg-b { top: 5.5%; right: 0; }
+.seg-e { bottom: 5.5%; left: 0; }
+.seg-c { bottom: 5.5%; right: 0; }
+
+.seg-colon {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14%;
+  height: clamp(35px, 10.4vw, 55.6px);
+  margin: 0 clamp(3px, 1vw, 7px);
+}
+
+.seg-colon i {
+  display: block;
+  width: clamp(5px, 1.4vw, 7px);
+  aspect-ratio: 1;
+  border-radius: 1px;
+  background: var(--acid);
+  box-shadow:
+    0 0 5px rgba(195, 217, 46, 0.9),
+    0 0 14px rgba(195, 217, 46, 0.6);
+  animation: drop-colon-blink 1s steps(1, end) infinite;
+}
+
+@keyframes drop-colon-blink {
+  50% { opacity: 0.15; }
+}
+
+.drop-clock-legend {
   font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-size: 0.62rem;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
   color: var(--ink-dim);
-  margin-top: 8px;
+  margin-bottom: 24px;
 }
 
 .drop-note {
@@ -644,10 +716,15 @@ img, video {
 /* ---------- About ---------- */
 
 .about {
-  max-width: 720px;
+  max-width: 980px;
   margin: 0 auto;
   padding: 140px 8vw;
+  display: flex;
+  align-items: flex-start;
+  gap: 64px;
 }
+
+.about-main { flex: 1 1 60%; }
 
 .about h2 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 24px; }
 
@@ -655,6 +732,22 @@ img, video {
 
 .about-note {
   text-transform: uppercase;
+}
+
+/* Sidebar funding blurb, sits beside the main About copy on desktop. */
+.about-invest {
+  flex: 0 0 300px;
+  padding-left: 48px;
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.about-invest h3 {
+  font-size: 1.4rem;
+  margin-bottom: 14px;
+}
+
+.invest-link {
+  display: inline-block;
 }
 
 /* ---------- Footer ---------- */
@@ -693,9 +786,20 @@ img, video {
 /* ---------- Responsive ---------- */
 
 @media (max-width: 720px) {
-  .piece { flex-direction: column; gap: 28px; }
+  .piece { flex-direction: column; align-items: stretch; gap: 28px; }
   .piece-media { flex-basis: auto; width: 100%; }
-  .piece-info { text-align: left; }
+  .piece-info { text-align: left; width: 100%; }
+
+  /* Funding blurb drops below the main About copy instead of sitting
+     beside it. */
+  .about { flex-direction: column; align-items: stretch; gap: 40px; }
+  .about-invest {
+    flex-basis: auto;
+    padding-left: 0;
+    padding-top: 32px;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
 }
 
 @media (max-width: 640px) {
