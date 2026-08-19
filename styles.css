@@ -705,23 +705,20 @@ img, video {
 .piece-pager-num {
   font-family: var(--mono);
   font-size: 0.78rem;
-  color: var(--ink-dim);
+  color: var(--ink);
   background: transparent;
   border: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  padding: 4px 2px;
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .piece-pager-num:hover {
-  color: var(--ink);
+  color: var(--acid);
 }
 
 .piece-pager-num.is-active {
-  color: var(--bg);
-  background: var(--acid);
+  color: var(--acid);
 }
 
 /* ---------- Shop CTA ---------- */
