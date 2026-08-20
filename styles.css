@@ -1,8 +1,8 @@
 /* ============================================
    HPNTK — palette pulled directly from the work:
-   near-black bg, dusty rose halftone, toxic
-   yellow-green fabric, electric-blue sparkle,
-   liquid-chrome grey.
+   near-black bg, dusty rose halftone, eerie
+   static-glow blue, electric-blue sparkle,
+   laser-red countdown, liquid-chrome grey.
    ============================================ */
 
 :root {
@@ -12,7 +12,8 @@
   --ink-dim: #a9a6a3;
   --rose: #a13d42;
   --rose-dim: #5c2a2d;
-  --acid: #c3d92e;
+  --acid: #4fe0f0;
+  --laser: #ff1744;
   --electric: #5b6ee8;
   --chrome: #9a9a9d;
 
@@ -243,12 +244,12 @@ p {
   justify-content: center;
   margin: 0 auto 14px;
   padding: 16px clamp(16px, 4vw, 32px);
-  background: #050705;
-  border: 1px solid rgba(195, 217, 46, 0.28);
+  background: #070505;
+  border: 1px solid rgba(255, 23, 68, 0.28);
   border-radius: 6px;
   box-shadow:
     inset 0 0 26px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(195, 217, 46, 0.12);
+    0 0 30px rgba(255, 23, 68, 0.12);
 }
 
 .seg-group {
@@ -264,16 +265,16 @@ p {
 
 .seg {
   position: absolute;
-  background: rgba(195, 217, 46, 0.07);
+  background: rgba(255, 23, 68, 0.07);
   transition: background 0.15s ease, box-shadow 0.15s ease;
 }
 
 .seg.is-on {
-  background: var(--acid);
+  background: var(--laser);
   box-shadow:
-    0 0 5px rgba(195, 217, 46, 0.9),
-    0 0 14px rgba(195, 217, 46, 0.6),
-    0 0 30px rgba(195, 217, 46, 0.35);
+    0 0 5px rgba(255, 23, 68, 0.9),
+    0 0 14px rgba(255, 23, 68, 0.6),
+    0 0 30px rgba(255, 23, 68, 0.35);
 }
 
 /* horizontal segments: top, middle, bottom */
@@ -315,10 +316,10 @@ p {
   width: clamp(5px, 1.4vw, 7px);
   aspect-ratio: 1;
   border-radius: 1px;
-  background: var(--acid);
+  background: var(--laser);
   box-shadow:
-    0 0 5px rgba(195, 217, 46, 0.9),
-    0 0 14px rgba(195, 217, 46, 0.6);
+    0 0 5px rgba(255, 23, 68, 0.9),
+    0 0 14px rgba(255, 23, 68, 0.6);
   animation: drop-colon-blink 1s steps(1, end) infinite;
 }
 
@@ -380,7 +381,7 @@ p {
   letter-spacing: 0.05em;
   color: var(--acid);
   background: transparent;
-  border: 1px solid rgba(195, 217, 46, 0.4);
+  border: 1px solid rgba(79, 224, 240, 0.4);
   border-radius: 4px;
   padding: 10px 18px;
   cursor: pointer;
@@ -389,7 +390,7 @@ p {
 
 .hype-btn:hover:not(:disabled) {
   border-color: var(--acid);
-  box-shadow: 0 0 12px rgba(195, 217, 46, 0.25);
+  box-shadow: 0 0 12px rgba(79, 224, 240, 0.25);
 }
 
 .hype-btn:disabled {

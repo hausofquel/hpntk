@@ -6,8 +6,33 @@
     <title>HPNTK — an archive of existence through art</title>
     <meta
       name="description"
-      content="HPNTK is a creative studio and personal archive exploring digital art, motion, and experimental media. Original pieces available to buy and hire."
+      content="HPNTK (hpntk.co) is a creative studio and personal archive exploring digital art, motion, and experimental media — video work released on YouTube as HPNTKTV. Original pieces available to buy and hire."
     />
+
+    <meta name="author" content="HPNTK" />
+
+    <!-- Open Graph / link previews (iMessage, Slack, Discord, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hpntk.co/" />
+    <meta property="og:site_name" content="HPNTK" />
+    <meta property="og:title" content="HPNTK — an archive of existence through art" />
+    <meta
+      property="og:description"
+      content="HPNTK (hpntk.co) is a creative studio and personal archive exploring digital art, motion, and experimental media — video work released on YouTube as HPNTKTV. Original pieces available to buy and hire."
+    />
+    <meta property="og:image" content="https://hpntk.co/assets/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter/X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="HPNTK — an archive of existence through art" />
+    <meta
+      name="twitter:description"
+      content="HPNTK (hpntk.co) is a creative studio and personal archive exploring digital art, motion, and experimental media — video work released on YouTube as HPNTKTV. Original pieces available to buy and hire."
+    />
+    <meta name="twitter:image" content="https://hpntk.co/assets/og-image.jpg" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -28,8 +53,7 @@
 
     <section id="top" class="hero" oncontextmenu="return false;">
       <video
-        class="hero-video is-active"
-        autoplay
+        class="hero-video"
         muted
         loop
         playsinline
@@ -40,7 +64,8 @@
         <source src="assets/hero-loop-0-static.mp4" type="video/mp4" />
       </video>
       <video
-        class="hero-video"
+        class="hero-video is-active"
+        autoplay
         muted
         loop
         playsinline
@@ -1070,13 +1095,20 @@
         schedule();
 
         // Clicking/tapping HPNTK cycles through all the hero loops layered
-        // in the background, and always fires its own glitch burst right
-        // on the click — on top of, not instead of, the ambient ones above.
-        // Two invisible strips on the left/right edges of the hero do the
-        // same thing but step backward/forward specifically — undocumented,
-        // just there for poking around.
+        // in the background (one of which is a pure TV-static loop), and
+        // always fires its own glitch burst right on the click — on top
+        // of, not instead of, the ambient ones above. Two invisible strips
+        // on the left/right edges of the hero do the same thing —
+        // undocumented, just there for poking around.
+        //
+        // The next loop is picked at random rather than stepping through
+        // in a fixed order, so the static loop (and every other loop)
+        // surfaces unpredictably instead of at a set position in the
+        // rotation. The only rule: never pick the loop that's already
+        // showing, so nothing — static included — ever repeats twice in
+        // a row.
         var videos = document.querySelectorAll(".hero-video");
-        var switchLoop = function (dir) {
+        var switchLoop = function () {
           burst();
           if (videos.length < 2) return;
 
@@ -1087,7 +1119,10 @@
               break;
             }
           }
-          var nextIndex = (activeIndex + dir + videos.length) % videos.length;
+          var nextIndex = activeIndex;
+          while (nextIndex === activeIndex) {
+            nextIndex = Math.floor(Math.random() * videos.length);
+          }
 
           videos[activeIndex].classList.remove("is-active");
           videos[nextIndex].classList.add("is-active");
@@ -1095,12 +1130,12 @@
         };
 
         mark.addEventListener("click", function () {
-          switchLoop(1);
+          switchLoop();
         });
         mark.addEventListener("keydown", function (e) {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            switchLoop(1);
+            switchLoop();
           }
         });
 
@@ -1108,11 +1143,11 @@
         var nextZone = document.querySelector(".hero-nav-next");
         if (prevZone)
           prevZone.addEventListener("click", function () {
-            switchLoop(-1);
+            switchLoop();
           });
         if (nextZone)
           nextZone.addEventListener("click", function () {
-            switchLoop(1);
+            switchLoop();
           });
       })();
     </script>
