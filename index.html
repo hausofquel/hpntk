@@ -64,8 +64,7 @@
         <source src="assets/hero-loop-0-static.mp4" type="video/mp4" />
       </video>
       <video
-        class="hero-video is-active"
-        autoplay
+        class="hero-video"
         muted
         loop
         playsinline
@@ -1102,12 +1101,52 @@
         // undocumented, just there for poking around.
         //
         // The next loop is picked at random rather than stepping through
-        // in a fixed order, so the static loop (and every other loop)
-        // surfaces unpredictably instead of at a set position in the
-        // rotation. The only rule: never pick the loop that's already
-        // showing, so nothing — static included — ever repeats twice in
-        // a row.
+        // in a fixed order. The static loop gets a flat 25% chance on
+        // every pick (initial load included) — the other loops split the
+        // remaining 75% evenly between them. The only hard rule: never
+        // pick the loop that's already showing, so nothing repeats twice
+        // in a row.
         var videos = document.querySelectorAll(".hero-video");
+
+        var staticIndex = -1;
+        for (var si = 0; si < videos.length; si++) {
+          var src = videos[si].querySelector("source");
+          if (src && src.src.indexOf("static") !== -1) {
+            staticIndex = si;
+            break;
+          }
+        }
+
+        // excludeIndex is the currently-showing loop (or -1 on first
+        // load, when nothing is showing yet and every loop is fair game).
+        var pickNextIndex = function (excludeIndex) {
+          var candidates = [];
+          for (var i = 0; i < videos.length; i++) {
+            if (i !== excludeIndex) candidates.push(i);
+          }
+          if (candidates.length === 0) return excludeIndex;
+
+          if (staticIndex !== -1 && staticIndex !== excludeIndex) {
+            if (Math.random() < 0.25) return staticIndex;
+            candidates = candidates.filter(function (i) {
+              return i !== staticIndex;
+            });
+          }
+          return candidates[Math.floor(Math.random() * candidates.length)];
+        };
+
+        // The very first loop a visitor sees is also picked with the same
+        // weighting — static included — rather than always opening on a
+        // fixed loop. No video carries a hardcoded "is-active"/"autoplay"
+        // in the markup; this is the only place the starting loop gets
+        // chosen.
+        (function pickInitialLoop() {
+          if (videos.length === 0) return;
+          var startIndex = pickNextIndex(-1);
+          videos[startIndex].classList.add("is-active");
+          videos[startIndex].play().catch(function () {});
+        })();
+
         var switchLoop = function () {
           burst();
           if (videos.length < 2) return;
@@ -1119,10 +1158,7 @@
               break;
             }
           }
-          var nextIndex = activeIndex;
-          while (nextIndex === activeIndex) {
-            nextIndex = Math.floor(Math.random() * videos.length);
-          }
+          var nextIndex = pickNextIndex(activeIndex);
 
           videos[activeIndex].classList.remove("is-active");
           videos[nextIndex].classList.add("is-active");
