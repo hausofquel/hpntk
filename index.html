@@ -1100,49 +1100,51 @@
         // on the left/right edges of the hero do the same thing —
         // undocumented, just there for poking around.
         //
-        // The next loop is picked at random rather than stepping through
-        // in a fixed order. The static loop gets a flat 25% chance on
-        // every pick (initial load included) — the other loops split the
-        // remaining 75% evenly between them. The only hard rule: never
-        // pick the loop that's already showing, so nothing repeats twice
-        // in a row.
+        // The "real" loops step through in a fixed order, same as
+        // before — no randomizing between them. Only the static loop is
+        // randomized: on every pick it has a flat 25% chance of
+        // interrupting that order (never twice in a row), and once it's
+        // shown, the real-loop order resumes exactly where it left off —
+        // static doesn't consume or skip a step in the rotation.
         var videos = document.querySelectorAll(".hero-video");
 
         var staticIndex = -1;
+        var realOrder = [];
         for (var si = 0; si < videos.length; si++) {
           var src = videos[si].querySelector("source");
           if (src && src.src.indexOf("static") !== -1) {
             staticIndex = si;
-            break;
+          } else {
+            realOrder.push(si);
           }
         }
 
-        // excludeIndex is the currently-showing loop (or -1 on first
-        // load, when nothing is showing yet and every loop is fair game).
-        var pickNextIndex = function (excludeIndex) {
-          var candidates = [];
-          for (var i = 0; i < videos.length; i++) {
-            if (i !== excludeIndex) candidates.push(i);
-          }
-          if (candidates.length === 0) return excludeIndex;
+        // Points at the real loop that's "up next" in the fixed rotation.
+        // Only advances when a real loop actually gets shown — a static
+        // interruption doesn't move it.
+        var realPos = 0;
 
-          if (staticIndex !== -1 && staticIndex !== excludeIndex) {
-            if (Math.random() < 0.25) return staticIndex;
-            candidates = candidates.filter(function (i) {
-              return i !== staticIndex;
-            });
+        // fromStatic: true when the loop currently showing is static —
+        // in that case a real loop is forced next (never two statics in
+        // a row). Otherwise static gets its usual 25% shot.
+        var pickNextIndex = function (fromStatic) {
+          if (staticIndex !== -1 && !fromStatic && Math.random() < 0.25) {
+            return staticIndex;
           }
-          return candidates[Math.floor(Math.random() * candidates.length)];
+          if (realOrder.length === 0) return staticIndex;
+          var index = realOrder[realPos];
+          realPos = (realPos + 1) % realOrder.length;
+          return index;
         };
 
-        // The very first loop a visitor sees is also picked with the same
-        // weighting — static included — rather than always opening on a
-        // fixed loop. No video carries a hardcoded "is-active"/"autoplay"
-        // in the markup; this is the only place the starting loop gets
-        // chosen.
+        // The very first loop a visitor sees follows the same rule —
+        // static gets its 25% shot, otherwise the rotation opens on the
+        // first real loop. No video carries a hardcoded
+        // "is-active"/"autoplay" in the markup; this is the only place
+        // the starting loop gets chosen.
         (function pickInitialLoop() {
           if (videos.length === 0) return;
-          var startIndex = pickNextIndex(-1);
+          var startIndex = pickNextIndex(false);
           videos[startIndex].classList.add("is-active");
           videos[startIndex].play().catch(function () {});
         })();
@@ -1158,7 +1160,7 @@
               break;
             }
           }
-          var nextIndex = pickNextIndex(activeIndex);
+          var nextIndex = pickNextIndex(activeIndex === staticIndex);
 
           // Explicitly pause the outgoing loop instead of leaving it
           // running out of view — some browsers silently suspend/rebuffer

@@ -13,6 +13,11 @@
   --rose: #a13d42;
   --rose-dim: #5c2a2d;
   --acid: #4fe0f0;
+  --acid-text: #eafdff;
+  --acid-glow:
+    0 0 6px rgba(79, 224, 240, 0.85),
+    0 0 14px rgba(79, 224, 240, 0.55),
+    0 0 26px rgba(79, 224, 240, 0.3);
   --laser: #ff1744;
   --electric: #5b6ee8;
   --chrome: #9a9a9d;
@@ -92,7 +97,8 @@ p {
   font-family: var(--mono);
   font-size: 0.68rem;
   letter-spacing: 0.03em;
-  color: var(--acid);
+  color: var(--acid-text);
+  text-shadow: var(--acid-glow);
   pointer-events: none;
   transition: max-width 0.5s ease, opacity 0.3s ease;
 }
@@ -224,7 +230,8 @@ p {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--acid);
+  color: var(--acid-text);
+  text-shadow: var(--acid-glow);
   margin-bottom: 10px;
 }
 
@@ -379,7 +386,8 @@ p {
   font-family: var(--mono);
   font-size: 0.78rem;
   letter-spacing: 0.05em;
-  color: var(--acid);
+  color: var(--acid-text);
+  text-shadow: var(--acid-glow);
   background: transparent;
   border: 1px solid rgba(79, 224, 240, 0.4);
   border-radius: 4px;
@@ -539,7 +547,8 @@ img, video {
   font-family: var(--mono);
   font-size: 0.78rem;
   letter-spacing: 0.05em;
-  color: var(--acid);
+  color: var(--acid-text);
+  text-shadow: var(--acid-glow);
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease;
 }
@@ -693,7 +702,8 @@ img, video {
 
 .piece-pager-arrow:hover:not(:disabled) {
   border-color: var(--acid);
-  color: var(--acid);
+  color: var(--acid-text);
+  text-shadow: var(--acid-glow);
 }
 
 .piece-pager-arrow:disabled {
@@ -725,11 +735,13 @@ img, video {
 }
 
 .piece-pager-num:hover {
-  color: var(--acid);
+  color: var(--acid-text);
+  text-shadow: var(--acid-glow);
 }
 
 .piece-pager-num.is-active {
-  color: var(--acid);
+  color: var(--acid-text);
+  text-shadow: var(--acid-glow);
 }
 
 /* ---------- Shop CTA ---------- */
@@ -801,7 +813,8 @@ img, video {
   padding: 4px 8px;
   background: rgba(10, 10, 12, 0.72);
   backdrop-filter: blur(6px);
-  color: var(--acid);
+  color: var(--acid-text);
+  text-shadow: var(--acid-glow);
 }
 
 .archive-card.is-coming-soon .archive-badge {
@@ -915,7 +928,7 @@ img, video {
 }
 
 .site-footer a { opacity: 0.85; transition: opacity 0.2s ease; }
-.site-footer a:hover { opacity: 1; color: var(--acid); }
+.site-footer a:hover { opacity: 1; color: var(--acid-text); text-shadow: var(--acid-glow); }
 
 .social-callout {
   font-family: var(--mono);
