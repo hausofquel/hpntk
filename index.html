@@ -1160,6 +1160,14 @@
           }
           var nextIndex = pickNextIndex(activeIndex);
 
+          // Explicitly pause the outgoing loop instead of leaving it
+          // running out of view — some browsers silently suspend/rebuffer
+          // hidden background video, which was showing up as a visible
+          // restart-then-continue hitch whenever a loop (static especially)
+          // came back into view. Pausing it ourselves preserves its exact
+          // currentTime, and resuming never seeks back to 0, so a loop
+          // picks up right where it left off instead of restarting.
+          videos[activeIndex].pause();
           videos[activeIndex].classList.remove("is-active");
           videos[nextIndex].classList.add("is-active");
           videos[nextIndex].play().catch(function () {});
